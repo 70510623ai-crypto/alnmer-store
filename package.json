@@ -1,0 +1,14 @@
+{
+  "name": "alnmer-cmyk-print-store",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "متجر مطبعة النمر ساين اند ديزاين",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "node -e \"console.log('Static public site ready')\""
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.4"
+  }
+}
