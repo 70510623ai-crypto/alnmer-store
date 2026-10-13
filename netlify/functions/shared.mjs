@@ -10,7 +10,11 @@ export const DEFAULT_PRODUCTS = [
  {id:'laser',title:'قص وحفر ليزر',subtitle:'خشب وأكريليك وهدايا مخصصة',category:'laser',unit:'quote',price:null,enabled:true,art:'laser',tags:['ليزر','حسب الطلب']},
  {id:'cards',title:'كروت شخصية',subtitle:'بطاقات أعمال بهويتك الخاصة',category:'printing',unit:'piece',price:null,enabled:true,art:'cards',tags:['هوية','شركات']},
  {id:'canvas',title:'طباعة كانفاس',subtitle:'صور ولوحات فنية للديكور',category:'printing',unit:'m2',price:null,enabled:true,art:'canvas',tags:['ديكور','صور']},
- {id:'photos',title:'طباعة صور ومستندات',subtitle:'خدمات سريعة وواضحة للطباعة',category:'printing',unit:'quote',price:null,enabled:true,art:'photos',tags:['صور','مستندات']}
+ {id:'photos',title:'طباعة صور ومستندات',subtitle:'خدمات متنوعة للطباعة حسب طلبك',category:'printing',unit:'quote',price:null,enabled:true,art:'photos',tags:['صور','مستندات']},
+ {id:'passport',title:'صور هوية وباسبور',subtitle:'صور رسمية للهوية وجواز السفر حسب المواصفات المطلوبة',category:'photos',unit:'quote',price:null,enabled:true,art:'passport',tags:['صور رسمية','باسبور']},
+ {id:'pdf',title:'طباعة ملفات PDF',subtitle:'طباعة مستندات أبيض وأسود أو ملوّن، وجه واحد أو وجهين',category:'printing',unit:'quote',price:null,enabled:true,art:'pdf',tags:['مستندات','PDF']},
+ {id:'photoprint',title:'تظهير وطباعة الصور',subtitle:'صور شخصية وعائلية بقياسات متعددة',category:'photos',unit:'quote',price:null,enabled:true,art:'photoprint',tags:['صور','ذكريات']},
+ {id:'installation',title:'فك وتركيب القارمات',subtitle:'فك القارمات القديمة وتركيب الجديدة حسب الموقع والقياس',category:'signs',unit:'quote',price:null,enabled:true,art:'installation',tags:['فك','تركيب']}
 ];
 export const json = (data,status=200)=>new Response(JSON.stringify(data),{status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store'}});
 export function isAdmin(req){
@@ -29,8 +33,9 @@ export function validProduct(raw){
  const title=cleanText(raw.title,100);
  if(!id||!title) return null;
  const unit=['m2','meter','piece','quote'].includes(raw.unit)?raw.unit:'quote';
- const category=['signs','printing','laser'].includes(raw.category)?raw.category:'printing';
+ const category=['signs','printing','laser','photos'].includes(raw.category)?raw.category:'printing';
  const price=raw.price===null || raw.price==='' || raw.price===undefined ? null : Number(raw.price);
  if(price!==null&&(!Number.isFinite(price)||price<0||price>1000000)) return null;
- return {id,title,subtitle:cleanText(raw.subtitle,200),category,unit,price,enabled:raw.enabled!==false,art:cleanText(raw.art,40),tags:Array.isArray(raw.tags)?raw.tags.slice(0,4).map(s=>cleanText(s,35)):[]};
+ const imageKey=typeof raw.imageKey==='string' && /^[a-f0-9-]{36}\.(?:webp|png|jpg)$/.test(raw.imageKey)?raw.imageKey:'';
+ return {id,title,subtitle:cleanText(raw.subtitle,200),category,unit,price,enabled:raw.enabled!==false,art:cleanText(raw.art,40),imageKey,tags:Array.isArray(raw.tags)?raw.tags.slice(0,4).map(s=>cleanText(s,35)):[]};
 }

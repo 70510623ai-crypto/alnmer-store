@@ -4,7 +4,16 @@ export default async (request)=>{
  try{
   const store=getStore('alnmer-catalog');
   if(request.method==='GET'){
-   const saved=await store.get('products',{type:'json',consistency:'strong'});
+   let saved=await store.get('products',{type:'json',consistency:'strong'});
+   // One-time migration: preserve all existing custom images, prices, and deleted services.
+   if(Array.isArray(saved)){
+    const migrated=await store.get('premium-services-v3');
+    if(migrated===null){
+     const added=DEFAULT_PRODUCTS.filter(x=>['passport','pdf','photoprint','installation'].includes(x.id)&&!saved.some(y=>y.id===x.id));
+     if(added.length){saved=[...saved,...added];await store.setJSON('products',saved);}
+     await store.set('premium-services-v3','yes');
+    }
+   }
    return json({products:Array.isArray(saved)?saved:DEFAULT_PRODUCTS});
   }
   if(request.method==='PUT'){

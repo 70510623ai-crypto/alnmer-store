@@ -9,8 +9,8 @@ export default async(request)=>{
    if(Number(request.headers.get('content-length')||'0')>30000)return json({error:'الطلب كبير'},413);
    const data=await request.json();
    if(data.website) return json({ok:true,id:'submitted'}); // honeypot
-   const name=cleanText(data.name,90), phone=cleanText(data.phone,35), note=cleanText(data.note,700);
-   if(name.length<2||!/^[+\d\s()-]{7,25}$/.test(phone)||!Array.isArray(data.items)||!data.items.length||data.items.length>25) return json({error:'يرجى إدخال اسم ورقم صحيح وخدمة واحدة على الأقل'},400);
+   const name=cleanText(data.name,90), phone=cleanText(data.phone,35), note=cleanText(data.note,700), fulfillment=data.fulfillment==='delivery'?'delivery':'pickup',deliveryAddress=cleanText(data.deliveryAddress,250);
+   if((fulfillment==='delivery'&&deliveryAddress.length<5)||name.length<2||!/^[+\d\s()-]{7,25}$/.test(phone)||!Array.isArray(data.items)||!data.items.length||data.items.length>25) return json({error:'يرجى إدخال اسم ورقم صحيح وخدمة واحدة على الأقل'},400);
    const items=data.items.map(item=>({
     serviceId:cleanText(item.serviceId,45), title:cleanText(item.title,100),
     width:Number(item.width)||0,height:Number(item.height)||0,quantity:Number(item.quantity),
@@ -18,7 +18,7 @@ export default async(request)=>{
    }));
    if(items.some(i=>!i.title||i.quantity<1||i.quantity>5000||!Number.isInteger(i.quantity)||i.width<0||i.width>10000||i.height<0||i.height>10000))return json({error:'بيانات القياسات أو الكميات غير صحيحة'},400);
    const id='AN-'+Date.now().toString(36).toUpperCase()+'-'+randomUUID().slice(0,5).toUpperCase();
-   const order={id,name,phone,note,items,status:'جديد',createdAt:new Date().toISOString()};
+   const order={id,name,phone,note,fulfillment,deliveryAddress,deliveryPrice:'حسب الطلب',items,status:'جديد',createdAt:new Date().toISOString()};
    await store.setJSON(id,order);
    return json({ok:true,id});
   }

@@ -16,6 +16,11 @@
   to = "/.netlify/functions/orders"
   status = 200
 
+[[redirects]]
+  from = "/api/media"
+  to = "/.netlify/functions/media"
+  status = 200
+
 [[headers]]
   for = "/admin.html"
   [headers.values]
