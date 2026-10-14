@@ -37,5 +37,6 @@ export function validProduct(raw){
  const price=raw.price===null || raw.price==='' || raw.price===undefined ? null : Number(raw.price);
  if(price!==null&&(!Number.isFinite(price)||price<0||price>1000000)) return null;
  const imageKey=typeof raw.imageKey==='string' && /^[a-f0-9-]{36}\.(?:webp|png|jpg)$/.test(raw.imageKey)?raw.imageKey:'';
- return {id,title,subtitle:cleanText(raw.subtitle,200),category,unit,price,enabled:raw.enabled!==false,art:cleanText(raw.art,40),imageKey,tags:Array.isArray(raw.tags)?raw.tags.slice(0,4).map(s=>cleanText(s,35)):[]};
+ const galleryKeys=Array.isArray(raw.galleryKeys)?[...new Set(raw.galleryKeys.filter(key=>typeof key==='string'&&/^[a-f0-9-]{36}\.(?:webp|png|jpg)$/.test(key)&&key!==imageKey))].slice(0,7):[];
+ return {id,title,subtitle:cleanText(raw.subtitle,200),category,unit,price,enabled:raw.enabled!==false,art:cleanText(raw.art,40),imageKey,galleryKeys,tags:Array.isArray(raw.tags)?raw.tags.slice(0,4).map(s=>cleanText(s,35)):[]};
 }

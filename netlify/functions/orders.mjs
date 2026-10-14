@@ -1,6 +1,7 @@
 import {getStore} from '@netlify/blobs';
 import {randomUUID} from 'node:crypto';
 import {json,isAdmin,cleanText} from './shared.mjs';
+import {uploadTokenFor} from './order-files.mjs';
 const statuses=['جديد','قيد التنفيذ','جاهز','مسلّم','ملغي'];
 export default async(request)=>{
  try{
@@ -17,10 +18,12 @@ export default async(request)=>{
     material:cleanText(item.material,80),notes:cleanText(item.notes,300)
    }));
    if(items.some(i=>!i.title||i.quantity<1||i.quantity>5000||!Number.isInteger(i.quantity)||i.width<0||i.width>10000||i.height<0||i.height>10000))return json({error:'بيانات القياسات أو الكميات غير صحيحة'},400);
+   // Only filenames and sizes are recorded; customer files remain on their own device.
+   const whatsappFiles=Array.isArray(data.whatsappFiles)?data.whatsappFiles.slice(0,20).map(f=>({name:cleanText(f.name,120),size:Math.max(0,Number(f.size)||0),serviceId:cleanText(f.serviceId,45)})).filter(f=>f.name&&Number.isFinite(f.size)):[];
    const id='AN-'+Date.now().toString(36).toUpperCase()+'-'+randomUUID().slice(0,5).toUpperCase();
-   const order={id,name,phone,note,fulfillment,deliveryAddress,deliveryPrice:'حسب الطلب',items,status:'جديد',createdAt:new Date().toISOString()};
+   const order={id,name,phone,note,fulfillment,deliveryAddress,deliveryPrice:'حسب الطلب',items,attachments:[],whatsappFiles,status:'جديد',createdAt:new Date().toISOString()};
    await store.setJSON(id,order);
-   return json({ok:true,id});
+   return json({ok:true,id,uploadToken:uploadTokenFor(id)});
   }
   if(!isAdmin(request))return json({error:'كلمة المرور غير صحيحة أو لم تُضبط على Netlify'},401);
   if(request.method==='GET'){

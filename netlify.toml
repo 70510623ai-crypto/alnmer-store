@@ -17,6 +17,11 @@
   status = 200
 
 [[redirects]]
+  from = "/api/order-files"
+  to = "/.netlify/functions/order-files"
+  status = 200
+
+[[redirects]]
   from = "/api/media"
   to = "/.netlify/functions/media"
   status = 200

@@ -1,0 +1,16 @@
+/* ALNMER v5 WhatsApp file handoff */
+.handoff-dialog{width:min(620px,94vw);max-height:92dvh;overflow:auto;border:none;border-radius:22px;padding:0;background:#fff;color:#171820;box-shadow:0 24px 80px #0007;font-family:inherit;text-align:right}
+.handoff-dialog::backdrop{background:#03040abd;backdrop-filter:blur(5px)}
+.handoff-top{background:#101116;color:#fff;padding:28px 28px 24px;border-top:5px solid #05b8e9;position:relative}
+.handoff-top:after{content:"";position:absolute;top:-5px;right:25%;width:25%;height:5px;background:#f9009b;box-shadow:145px 0 #fee500;pointer-events:none}
+.handoff-success{display:grid;place-items:center;border-radius:50%;width:49px;height:49px;background:#0eaf78;color:white;font-weight:900;font-size:25px;margin-bottom:12px}
+.handoff-kicker{display:block;letter-spacing:1px;font:700 10px Arial,sans-serif;color:#71def1;margin-bottom:7px}
+.handoff-top h2{font-size:clamp(20px,3.5vw,27px);margin:0 0 12px;line-height:1.5}.handoff-top p{line-height:1.9;font-size:13px;color:#e0e0e5;margin:0}
+.handoff-body{padding:22px 26px 25px}.handoff-step{display:flex;align-items:flex-start;gap:16px;padding:18px 0;border-bottom:1px solid #e5e7ee}.handoff-step>div{flex:1;min-width:0}.handoff-num{background:#f2f3f6;border-radius:12px;padding:11px 9px;color:#222;font:900 15px Arial,sans-serif}
+.handoff-step h3{margin:0 0 8px;font-size:16px}.handoff-step p{margin:0 0 12px;line-height:1.9;font-size:12px;color:#4b5160}
+.handoff-main-action,.handoff-secondary-action,.handoff-native-btn{display:block;text-align:center;border:0;border-radius:12px;text-decoration:none;font-weight:900;font-size:13px;line-height:1.7;padding:13px 14px;cursor:pointer;width:100%;box-sizing:border-box}
+.handoff-main-action{background:#139c61;color:white}.handoff-secondary-action{background:#e6f6ed;color:#09663c}.handoff-native-btn{background:#1b2029;color:#fff;margin:9px 0}.handoff-instructions{font-size:11px!important;color:#6b7280!important;margin:11px 0 0!important}
+.handoff-file-list{display:grid;gap:5px;max-height:155px;overflow:auto;margin:11px 0}.handoff-file-list .file-chip{font-size:11px;padding:7px}.handoff-error{color:#a32d20;font-size:12px;line-height:1.8;margin:14px 0}.handoff-finish{border:1px solid #c4c8d0;border-radius:9px;color:#25272c;background:white;padding:12px 13px;width:100%;font-weight:800;cursor:pointer}
+.handoff-resume{position:fixed;z-index:65;bottom:17px;right:17px;max-width:min(92vw,380px);background:#0d9b63;color:white;padding:14px 19px;border:0;border-radius:50px;box-shadow:0 6px 25px #0004;font-weight:900;cursor:pointer}
+[hidden]{display:none!important}
+@media(max-width:520px){.handoff-top{padding:20px}.handoff-body{padding:12px 18px 20px}.handoff-step{gap:9px}.handoff-num{padding:10px 7px}}
